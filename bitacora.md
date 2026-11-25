@@ -28,6 +28,8 @@ los problemas identificados son:
 
 ### Plan en pseudocódigo
 
+
+
 Función auxiliar de normalización usada en las comparaciones:
 
 valorVenta(venta)
@@ -69,13 +71,62 @@ ventasPorCiudad(ventas, ciudad)                ACUMULADOR con condición
   PARA CADA venta EN ventas
     SI normalizar(venta.ciudad) = buscada
       total ← total + valorVenta(venta)
-  RETORNAR total
-```
+  RETORNAR total```
 
-| Función | Qué recorre | Condición | Qué acumula | Valor inicial |
-|---|---|---|---|---|
-| `totalVendido` | todas las ventas | ninguna | valor de cada venta | `0` |
-| `unidadesVendidas` | todas las ventas | ninguna | cantidad de cada venta | `0` |
-| `ventaMayor` | todas las ventas | cantidad > 0 y valor mayor que el actual | el registro de mayor valor | `null` |
-| `ticketPromedio` | todas las ventas | cantidad > 0 | valor total y número de ventas válidas | `0` y `0` |
-| `ventasPorCiudad` | todas las ventas | ciudad normalizada = ciudad buscada | valor de cada venta que cumple | `0` |
+  | Función | Qué recorre | Condición | Qué acumula | Valor inicial |
+  |---|---|---|---|---|
+  | `totalVendido` | todas las ventas | ninguna | valor de cada venta | `0` |
+  | `unidadesVendidas` | todas las ventas | ninguna | cantidad de cada venta | `0` |
+  | `ventaMayor` | todas las ventas | cantidad > 0 y valor mayor que el actual | el registro de mayor valor | `null` |
+  | `ticketPromedio` | todas las ventas | cantidad > 0 | valor total y número de ventas válidas | `0` y `0` |
+  | `ventasPorCiudad` | todas las ventas | ciudad normalizada = ciudad buscada | valor de cada venta que cumple | `0` |
+
+---
+
+### Tabla traza totalVendido(ventas)
+| Vuelta | Cantidad | Precio | Valor de venta | Total acumulado |
+|---|---:|---:|---:|---:|
+| Inicio | — | — | — | 0 |
+| 1 | 2 | 15.000 | 30.000 | 30.000 |
+| 2 | 3 | 10.000 | 30.000 | 60.000 |
+| 3 | 1 | 20.000 | 20.000 | 80.000 |
+| 4 | 0 | 12.000 | 0 | 80.000 |
+
+Mediante la tabla de traza de la función `totalVendido(ventas)`, pude observar cómo se calcula el total de las ventas utilizando un ciclo `for...of` y un acumulador.
+
+La variable `total` comienza en cero y, en cada repetición, se suma el resultado de la función `valorVenta(venta)`, que multiplica la cantidad de productos por su precio unitario.
+
+Durante las 12 iteraciones, el acumulador aumenta según el valor de cada venta. En el registro con cantidad igual a cero, el total no cambia, ya que esa venta tiene un valor de $0.
+
+Al finalizar el recorrido, se obtiene un total vendido de **$985.000**.
+
+Este ejercicio me permitió comprender cómo funcionan los acumuladores dentro de un ciclo y cómo podemos utilizar funciones para realizar cálculos sin repetir código.
+
+---
+
+### Tabla traza ventaMyor(ventas)
+
+| Vuelta | ID | Producto | Cantidad | Precio unitario | Valor de venta | ¿Supera a la mayor? | Mayor acumulada |
+|---|---|---|---:|---:|---:|---|---:|
+| Inicio | — | — | — | — | — | — | `null` |
+| 1 | 1 | Origen Huila 500 g | 2 | $42.000 | $84.000 | Sí, es la primera venta | $84.000 (ID 1) |
+| 2 | 2 | Origen Nariño 250 g | 1 | $26.000 | $26.000 | No | $84.000 (ID 1) |
+| 3 | 3 | Prensa francesa | 1 | $95.000 | $95.000 | Sí | $95.000 (ID 3) |
+| 4 | 4 | Origen Huila 500 g | 1 | $42.000 | $42.000 | No | $95.000 (ID 3) |
+| 5 | 5 | Origen Sierra 500 g | 3 | $45.000 | $135.000 | Sí | $135.000 (ID 5) |
+| 6 | 6 | Origen Nariño 250 g | 2 | $26.000 | $52.000 | No | $135.000 (ID 5) |
+| 7 | 7 | Molino manual | 1 | $120.000 | $120.000 | No | $135.000 (ID 5) |
+| 8 | 8 | Origen Huila 500 g | 0 | $42.000 | $0 | No | $135.000 (ID 5) |
+| 9 | 9 | Origen Sierra 500 g | 2 | $45.000 | $90.000 | No | $135.000 (ID 5) |
+| 10 | 10 | Origen Huila 500 g | 4 | $42.000 | $168.000 | **Sí** | **$168.000 (ID 10)** |
+| 11 | 11 | Prensa francesa | 1 | $95.000 | $95.000 | No | $168.000 (ID 10) |
+| 12 | 12 | Origen Nariño 250 g | 3 | $26.000 | $78.000 | No | **$168.000 (ID 10)** |
+
+Mediante la tabla de traza de la función `ventaMayor(ventas)`, se analizaron los 12 registros del arreglo utilizando un ciclo `for...of` y una condición `if`.
+
+La variable `mayor` comenzó con el valor `null` y se actualizó cada vez que se encontró una venta cuyo valor total era superior al máximo registrado anteriormente.
+
+Durante las 12 iteraciones, la variable `mayor` se actualizó cuatro veces. Finalmente, se identificó que la venta de mayor valor fue la del ID 10, correspondiente al producto «Origen Huila 500 g», con una cantidad de 4 unidades y un precio unitario de $42.000, para un total de $168.000.
+
+Este ejercicio permitió comprender el patrón de máximo, el funcionamiento de los ciclos y la importancia de conservar el objeto completo cuando se necesita recuperar toda la información de una venta.
+
