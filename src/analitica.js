@@ -162,6 +162,10 @@ function topProductosPorValor(ventas, k) {
     return copiaProductos.slice(0, k);
 }
 
+function ventasDelDia(ventas, fecha) {
+    return ventas.filter(venta => venta.fecha === fecha);
+}
+
 
 
 module.exports = {
@@ -177,7 +181,9 @@ module.exports = {
     ventasPorCiudadM,
     totalPorCiudad,
     unidadesPorProducto,
-    topProductosPorValor
+    topProductosPorValor,
+    ventasDelDia
 };
+
 
 

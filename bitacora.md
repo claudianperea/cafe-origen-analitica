@@ -130,3 +130,42 @@ Durante las 12 iteraciones, la variable `mayor` se actualizó cuatro veces. Fina
 
 Este ejercicio permitió comprender el patrón de máximo, el funcionamiento de los ciclos y la importancia de conservar el objeto completo cuando se necesita recuperar toda la información de una venta.
 
+# Minirreto 4 — Depuración del motor de analítica
+
+## Error 1: ciudades duplicadas
+
+**Síntoma:** Al agrupar las ventas por ciudad sin normalizar los nombres, Bogotá aparecía en dos grupos diferentes.
+
+**Entrada que produce el error:** Dos registros con las ciudades `"Bogotá"` y `"Bogotá "`.
+
+**Hipótesis:** El problema podía estar relacionado con los espacios sobrantes en los nombres de las ciudades, porque JavaScript compara los textos de manera exacta.
+
+**Prueba realizada:** Se creó un arreglo con dos ventas de Bogotá, una con un espacio final, y se ejecutó una agrupación sin normalizar los textos. Después se comparó el resultado con la función `totalPorCiudad()`.
+
+**Causa:** Las cadenas `"Bogotá"` y `"Bogotá "` son diferentes para JavaScript. Por eso, al utilizarlas como claves de un objeto, se generan dos grupos.
+
+**Corrección:** Se utilizaron `trim()` y `toLowerCase()` para normalizar los nombres antes de agrupar. Así, los dos registros corresponden a una misma ciudad.
+
+**Resultado esperado de la verificación:** Un único grupo para Bogotá, con un valor total de $35.000.
+
+## Error 2: ticket promedio con NaN
+
+**Síntoma:** El cálculo del ticket promedio podía devolver `NaN` cuando se consultaba una fecha sin ventas.
+
+**Entrada que produce el error:** Un arreglo vacío `[]`.
+
+**Hipótesis:** El error podía ocurrir porque el programa intentaba dividir el total vendido entre cero.
+
+**Prueba realizada:** Se reprodujo el cálculo `0 / 0` y se comprobó su resultado. Después se probó `ticketPromedio([])` y un arreglo con una venta cuya cantidad era cero.
+
+**Causa:** Al no existir ventas válidas, el total vendido y la cantidad de compras eran cero. Dividir cero entre cero genera `NaN`.
+
+**Corrección:** Se agregó una condición que comprueba si la cantidad de ventas válidas es cero. Cuando se cumple, la función devuelve `0` sin realizar la división.
+
+**Resultado esperado de la verificación:** La función devuelve `0` para un día sin ventas y no produce `NaN`.
+
+## Conclusión
+
+Este ejercicio me permitió comprender la importancia de comprobar los datos antes de realizar operaciones y de normalizar los textos antes de utilizarlos para agrupar información.
+
+También aprendí que la depuración no consiste solamente en corregir un error, sino en identificar qué lo produce, reproducirlo y verificar que la solución funciona correctamente.
